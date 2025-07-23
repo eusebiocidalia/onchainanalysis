@@ -23,23 +23,23 @@ coins = [
 
 metrics = {
     "Market Capitalization": ("High = Popular, Risk of Overvaluation", "Low = Potential Growth Area"),
-    "Realized Capitalization": ("Tracks Actual Value Paid", "Used in MVRV, not direct signal"),
-    "Active Addresses": ("More = Usage, Bullish", "Drop = Lack of Interest"),
-    "Addresses Holding > X": ("Rise = Confidence", "Drop = Weak Hands"),
-    "Transaction Volume": ("Spike = Shift in Sentiment", "Low = Disinterest"),
-    "Hash Rate": ("Up = Network Secure", "Down = Risk of Attack (PoW only)"),
-    "Exchange Flows": ("Inflow = Bearish", "Outflow = Bullish"),
+    "Realized Capitalization": ("> $100B = High", "< $50B = Low"),
+    "Active Addresses": ("> 1M = Strong Network", "< 100k = Weak"),
+    "Addresses Holding > X": ("Rising = Confidence", "Dropping = Weak Hands"),
+    "Transaction Volume": ("> $10B = Active", "< $1B = Inactive"),
+    "Hash Rate": ("High = Secure", "Low = Vulnerable"),
+    "Exchange Flows": ("> Inflow = Bearish", "Outflow = Bullish"),
     "Net Unrealized Profit/Loss (NUPL)": (">0.75 = Overheated", "<0.5 = Safer Zone"),
     "Long/Short-Term On-chain Cost Basis": ("Below Price = Bullish", "Above = Risk"),
     "SOPR": (">1 = Profit Taking", "<1 = Capitulation"),
     "MVRV": (">3 = Overvalued", "<1 = Undervalued"),
-    "Long-Term Holder MVRV": ("High = Distribution Phase", "Low = Accumulation"),
-    "Short-Term Holder MVRV": ("High = Caution", "Low = Opportunity"),
+    "Long-Term Holder MVRV": (">2.5 = Distribution", "<1 = Accumulation"),
+    "Short-Term Holder MVRV": (">2 = Caution", "<1 = Opportunity"),
     "MVRV Z-Score": (">7 = Top Zone", "<0 = Undervalued"),
-    "Spot Volume": ("Spike = Volatility Ahead", "Flat = Calm Market"),
-    "Spot Volume Delta": ("Spike = Momentum Change", "Drop = Pause"),
-    "Percent Balance on Exchanges": ("High = Sell Pressure", "Low = Long-Term Holding"),
-    "Net Transfer Volume": ("Out = Bullish", "In = Bearish")
+    "Spot Volume": ("> 5B = Volatile", "< 1B = Calm"),
+    "Spot Volume Delta": ("> 50% = Shift", "< 10% = Flat"),
+    "Percent Balance on Exchanges": (">10% = Risky", "<5% = Safe"),
+    "Net Transfer Volume": ("> Outflow = Bullish", "Inflow = Bearish")
 }
 
 # Create editable table
@@ -79,6 +79,11 @@ for i, row in edited_df.iterrows():
             insights.append("🔥 NUPL is high — market may be overheated")
         elif row["Net Unrealized Profit/Loss (NUPL)"] != "" and float(row["Net Unrealized Profit/Loss (NUPL)"]) < 0.5:
             insights.append("🟢 NUPL is moderate — safer zone")
+
+        if row["MVRV Z-Score"] != "" and float(row["MVRV Z-Score"]) > 7:
+            insights.append("🚨 MVRV Z-Score > 7 — strong top signal")
+        elif row["MVRV Z-Score"] != "" and float(row["MVRV Z-Score"]) < 0:
+            insights.append("🟢 MVRV Z-Score < 0 — likely undervalued")
 
     except ValueError:
         continue
